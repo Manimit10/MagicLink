@@ -1,0 +1,25 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id         String      @id @default(uuid())
+  name       String
+  email      String      @unique
+  magicLinks MagicLink[]
+}
+
+model MagicLink {
+  id         String   @id @default(uuid())
+  token      String
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  // TODO: add this field to db for checking whether the link has used before or not
+  // isUsed     Boolean
+  validUntil DateTime
+}
